@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Item
-from .serializers import ItemSerializer
+from .models import Item, Photo
+from .serializers import ItemSerializer, PhotoSerializer
 
 class ItemView(APIView):
     def get(self, request):
@@ -28,3 +28,9 @@ class ItemDetailView(APIView):
         except Item.DoesNotExist:
             return Response({"error": "Item not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
+class ItemPhotosAPIView(APIView):
+    def get(self, request, id):
+        photos = Photo.objects.filter(item_id=id)
+        serializer = PhotoSerializer(photos, many=True)
+        return Response(serializer.data)
