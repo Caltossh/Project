@@ -4,20 +4,17 @@ class Category(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    price = models.FloatField()
 
     def to_json(self):
         return{
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            "price": self.price
         }
 
 class Item(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
     season = models.CharField(max_length=100)
     size = models.CharField(max_length=10)
     amount = models.IntegerField()
@@ -35,4 +32,16 @@ class Item(models.Model):
             "amount": self.amount,
             "price": self.price,
             "description": self.description 
+        }
+
+
+class Photo(models.Model):
+    id = models.IntegerField(primary_key=True)
+    image = models.ImageField(upload_to='item_photos/', blank=True, null=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='photos')
+
+    def to_json(self):
+        return{
+            "id": self.id,
+            "image_url": self.image.url if self.image else None
         }
