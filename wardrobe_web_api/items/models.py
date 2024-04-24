@@ -11,6 +11,9 @@ class Category(models.Model):
             "name": self.name,
             "description": self.description,
         }
+    
+    def __str__(self) -> str:
+        return self.name
 
 class Item(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -33,6 +36,9 @@ class Item(models.Model):
             "price": self.price,
             "description": self.description 
         }
+    
+    def __str__(self) -> str:
+        return self.name
 
 
 class Photo(models.Model):
@@ -45,3 +51,6 @@ class Photo(models.Model):
             "id": self.id,
             "image_url": self.image.url if self.image else None
         }
+    
+    def __str__(self):
+        return f"Photo ID: {self.id}, Item: {self.item.name}"
