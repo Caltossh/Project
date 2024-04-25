@@ -43,7 +43,7 @@ class Item(models.Model):
 
 class Photo(models.Model):
     id = models.IntegerField(primary_key=True)
-    image = models.ImageField(upload_to='item_photos/', blank=True, null=True)
+    imageUrl = models.TextField()
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='photos')
 
     def to_json(self):
@@ -54,3 +54,7 @@ class Photo(models.Model):
     
     def __str__(self):
         return f"Photo ID: {self.id}, Item: {self.item.name}"
+    
+
+
+

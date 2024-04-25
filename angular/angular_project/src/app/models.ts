@@ -14,4 +14,3 @@ export interface Items {
     description: string,
     category: Category
 }
-
