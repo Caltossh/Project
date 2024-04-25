@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Category, Item, Photo
 from .serializers import CategorySerializer, ItemSerializer, PhotoSerializer
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate, login, logout
 
 class ItemView(APIView):
     def get(self, request):
@@ -46,7 +48,7 @@ class ItemDetailView(APIView):
 
 def item_photos(request, id):
     photos = Photo.objects.filter(item_id=id)
-    photo_urls = [photo.image.url for photo in photos]
+    photo_urls = [photo.imageUrl for photo in photos]
 
     return JsonResponse(photo_urls, safe=False)
     
@@ -82,3 +84,22 @@ def category_items(request, id):
     serializer = ItemSerializer(items, many=True)
     
     return JsonResponse(serializer.data, safe=False)
+
+
+# --------------------------------------
+class LoginView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            login(request, user)
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+class LogoutView(APIView):
+    def post(self, request):
+        logout(request)
+        return Response(status=status.HTTP_200_OK)

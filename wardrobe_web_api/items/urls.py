@@ -8,4 +8,6 @@ urlpatterns = [
     path('categories/', views.CategoryView.as_view()),
     path('categories/<int:id>/', views.CategoryDetailView.as_view()),
     path('categories/<int:id>/items/', views.category_items, name='category_items'),
+    path('api/login/', views.LoginView.as_view()),
+    path('api/logout/', views.LogoutView.as_view()),
 ]
